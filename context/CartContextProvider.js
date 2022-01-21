@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import { rssApi } from "../helpers/axios";
+import { userApi } from "../helpers/axios";
 export const CartContext = createContext();
 
 export const CartContextProvider = ({ children }) => {
@@ -13,11 +13,7 @@ export const CartContextProvider = ({ children }) => {
   useEffect(() => {
     if (access_token) {
       const fetchData = async () => {
-        const res = await rssApi.get("cart", {
-          headers: {
-            Authorization: access_token,
-          },
-        });
+        const res = await userApi.get("cart");
         if (res) {
           setCartData(res.data.data)
         }

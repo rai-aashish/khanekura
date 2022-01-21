@@ -28,9 +28,6 @@ function Cart() {
     }
   });
 
-  useEffect(() => {
-    if (cartData) console.log(cartData);
-  }, [cartData]);
 
   return (
     <Container>

@@ -46,6 +46,7 @@ export const CartProduct = ({ productData, updateCart }) => {
             layout="fill"
             objectFit="contain"
             alt={productData.product.title}
+            priority="false"
           />
         </div>
         <div>{productData.product.title}</div>
@@ -189,11 +190,11 @@ export const CartSummary = ({
         <span>NRs {grandTotal}</span>
       </div>
 
-      <Link href="/checkout">
-        <a>
-          CHECKOUT
-        </a>
-      </Link>
+      <div className={styles["checkout"]}>
+        <Link href="/user/checkout">
+          <a>CHECKOUT</a>
+        </Link>
+      </div>
     </div>
   );
 };

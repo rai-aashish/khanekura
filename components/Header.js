@@ -32,6 +32,7 @@ export default function Header() {
             alt="khanekura"
             layout="fill"
             objectFit="scale-down"
+            priority="false"
           />
         </div>
         <div className={styles["top-menu"]}>

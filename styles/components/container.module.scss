@@ -1,0 +1,59 @@
+@use "../variables.scss" as var;
+
+.container {
+  max-width: 110rem;
+  padding: 0 1rem;
+  margin: 0 auto;
+
+  &--sm {
+    max-width: var.$sm;
+  }
+
+  &--fluid {
+    max-width: unset;
+  }
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 2rem;
+
+  &.justify-center {
+    justify-content: center;
+  }
+}
+
+.page-section {
+  padding: 5rem 0;
+
+  &__title {
+    h2 {
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    margin-bottom: 2rem;
+  }
+}
+
+.section-divider {
+  display: flex;
+  gap: 1rem;
+  > div:nth-child(1) {
+    width: 30rem;
+  }
+
+  > div:nth-child(2) {
+    padding:0 1rem;
+  }
+
+  @media (max-width: var.$sm) {
+    display: block;
+
+    > div:nth-child(1) {
+      width: 100%;
+    }
+  }
+}

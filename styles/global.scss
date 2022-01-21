@@ -1,0 +1,49 @@
+@use "./variables.scss" as var;
+
+html,
+body {
+  font-size: 62.5%;
+  font-family: var.$main-font;
+
+  @media (max-width: var.$sm) {
+    font-size: 55%;
+  }
+}
+
+body {
+  background-color: var.$white-color;
+  font-size: 1.4rem;
+  color: var.$dark-color;
+}
+
+a {
+  text-decoration: none;
+  color: var.$dark-color;
+
+  &:hover {
+    color: var.$tertiary-color;
+  }
+}
+
+* {
+  list-style-type: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+input,
+button,
+select {
+  padding: 1.5rem;
+  outline: none;
+  border: 0.1rem solid rgba(var.$dark-color, 0.2);
+}
+
+input[type="submit"] ,button{
+  cursor: pointer;
+}
+
+::placeholder {
+  color: var.$light-grey-color;
+}

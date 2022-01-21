@@ -1,0 +1,7 @@
+@use '../variables.scss' as var;
+
+.footer{
+    padding:10rem 4rem;
+    background-color: var.$dark-color;
+    color:var.$white-color;
+}

@@ -1,0 +1,94 @@
+@use "../variables.scss" as var;
+
+.product-view {
+  display: flex;
+  gap: 1rem;
+
+  @media (max-width: var.$sm) {
+    flex-direction: column;
+  }
+
+  .cover-image {
+    position: relative;
+    border-radius:0.8rem;
+    overflow: hidden;
+    width: min(100%, 50rem);
+    aspect-ratio: 1/1;
+    margin: auto;
+  }
+
+  .product-contents {
+    padding: 1rem;
+    flex: 1;
+
+    p {
+      margin: 1rem 0;
+      &.category {
+        color: var.$grey-color;
+      }
+
+      &.price {
+          color:var.$success-color;
+          font-size: 1.8rem;
+      }
+
+      &.note{
+        input{
+          width:min(80%,40rem);
+          min-height: 6rem;
+          color:var.$grey-color;
+        }
+      }
+
+      &.description {
+          margin: 0;
+      }
+    }
+  }
+
+  .cart-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 3rem;
+
+    &__buttons {
+      width: 10rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 0.1rem solid var.$light-grey-color;
+      border-radius: 0.5rem;
+
+      span {
+        color: var.$grey-color;
+        &.icon {
+          padding: 1rem;
+          cursor: pointer;
+        }
+
+        &.product-quantity {
+          font-size: 2rem;
+        }
+      }
+    }
+
+    button.submit {
+      background-color: var.$success-color;
+      color: var.$white-color;
+      border-radius: 0.8rem;
+      font-weight: 600;
+      font-size: 1.7rem;
+      padding:1rem 4rem;
+      transition: all 0.4s ease;
+
+      .icon{
+          margin-left:0.8rem;
+      }
+
+      &:hover{
+          background-color:var.$primary-color;
+      }
+    }
+  }
+}

@@ -1,0 +1,214 @@
+@use "../variables.scss" as var;
+
+.header {
+  .top {
+    display: flex;
+    gap: 5rem;
+    padding: 0 2rem;
+    align-items: center;
+    color: var.$light-dark-color;
+
+    .top-logo {
+      position: relative;
+      width: 20rem;
+      height: 8rem;
+    }
+
+    .top-menu {
+      display: flex;
+      flex-grow: 1;
+      align-items: center;
+      justify-content: space-between;
+
+      form {
+        width: 40rem;
+        input {
+          width: 80%;
+        }
+        button[type="submit"] {
+          background-color: var.$secondary-color;
+          color: var.$white-color;
+          cursor: pointer;
+        }
+
+        span.icon {
+          display: inline-block;
+          transform: scale(1.3);
+        }
+      }
+
+      .top-menu__user-options {
+        .username {
+          text-transform: capitalize;
+        }
+
+        a {
+          font-weight: 700;
+        }
+        span:not(:last-child) {
+          margin-right: 1rem;
+        }
+      }
+    }
+  }
+
+  .bottom {
+    background-color: var.$primary-color;
+    color: var.$white-color;
+    padding: 1.5rem 0;
+
+    .nav-container {
+      position: relative;
+
+      a {
+        color: var.$white-color;
+        text-transform: uppercase;
+      }
+
+      button.hamburger {
+        border-radius: 1rem;
+        color: var.$dark-color;
+      }
+
+      nav {
+        ul {
+          display: flex;
+          gap: 3rem;
+          font-weight: 600;
+
+          li {
+            & > a {
+              position: relative;
+
+              &:hover::after,&.active::after {
+                transform: scaleX(1);
+              }
+
+              &::after {
+                position: absolute;
+                bottom: -0.8rem;
+                left: 0;
+                content: "";
+                background-color: var.$white-color;
+                width: 100%;
+                height: 0.2rem;
+                transform-origin: center;
+                transform: scaleX(0);
+                transition: all 0.3s ease-in-out;
+              }
+            }
+          }
+        }
+      }
+
+      .cart {
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+
+        .product-no{
+            border-radius: 50%;
+            font-size: 1.8rem;
+            font-weight: 700;
+          }
+        }
+      
+    }
+
+    &.sticky {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 0.1rem 0.5rem rgba(29, 29, 29, 0.445);
+      animation: fade-from-top 0.4s linear;
+    }
+  }
+}
+
+@keyframes fade-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-2rem);
+  }
+}
+
+@media (max-width: var.$md) {
+  .header {
+    .top {
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .top-logo {
+        width: min(70%, 50rem);
+      }
+
+      .top-menu {
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        form {
+          width: 100%;
+          text-align: center;
+        }
+
+        .top-menu__user-options {
+          margin: 1rem;
+        }
+      }
+    }
+
+    .bottom {
+      background-color: var.$silver-color;
+
+      .nav-container {
+        a {
+          color: var.$dark-color;
+        }
+
+        nav.mobile-nav {
+          position: fixed;
+          top: 0;
+          margin: auto;
+          width: 98%;
+          min-height: 80vh;
+          background-color: var.$silver-color;
+          z-index: 1000;
+          text-align: center;
+          font-size: 2rem;
+          border-bottom-left-radius: 1rem;
+          border-bottom-right-radius: 1rem;
+          padding-top: 3rem;
+
+          ul {
+            display: block;
+
+            li {
+              margin: 2rem 0;
+              a::after {
+                background-color: var.$dark-color;
+              }
+            }
+          }
+
+          .quit-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            border-radius: 50%;
+
+            &:hover {
+              background-color: var.$danger-color;
+              color: var.$white-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}

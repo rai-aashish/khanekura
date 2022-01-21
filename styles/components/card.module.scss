@@ -1,0 +1,128 @@
+@use "../variables.scss" as var;
+
+.category-card {
+  position: relative;
+  width: 30rem;
+  height: 11rem;
+  overflow: hidden;
+
+  &__typography {
+    position: relative;
+    z-index: 5;
+    padding: 2rem;
+
+    h4 {
+      margin-bottom: 1rem;
+    }
+
+    span {
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    a {
+      display: inline-block;
+      transition: all 0.4s ease;
+
+      .icon {
+        color: var.$primary-color;
+        margin-left: 0.5rem;
+      }
+      &:hover {
+        transform: translateX(1rem);
+      }
+    }
+  }
+
+  img {
+    transition: all 0.5s ease;
+  }
+
+  &:hover {
+    img {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.product-card {
+  border: 0.1rem solid var.$light-grey-color;
+  border-radius: 0.5rem;
+  width: 20rem;
+  overflow: hidden;
+
+  &__image {
+    position: relative;
+    height: 20rem;
+
+    .explore-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      z-index: 10;
+      background-color: var.$white-color;
+      border-radius: 50%;
+      padding: 1rem;
+      color: var.$grey-color;
+      transition: all 0.4s ease;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var.$primary-color;
+        color: var.$white-color;
+        border: 0.1rem solid rgba(var.$white-color,0.3);
+      }
+    }
+  }
+
+  &__desc {
+    padding: 1rem;
+    span {
+      display: block;
+
+      &.category {
+        color: var.$grey-color;
+      }
+
+      &.price {
+        color: var.$success-color;
+        font-weight: 600;
+      }
+    }
+    a.title{
+      display: inline-block;
+      margin: 0.5rem 0;
+      font-weight: 600;
+    }
+
+    a.shop {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem;
+      transition: all 0.4s ease;
+      border-radius: 0.5rem;
+
+      &:hover {
+        transform: translateX(1rem);
+      }
+    }
+  }
+
+  &:hover {
+    box-shadow: 0.1rem 0.1rem 1rem 0.5rem rgba(var.$primary-color, 0.7);
+
+    .product-card__image {
+      .explore-icon {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    .product-card__desc {
+      a.shop {
+        background-color: rgba(var.$primary-color, 0.8);
+        color: var.$white-color;
+      }
+    }
+  }
+}

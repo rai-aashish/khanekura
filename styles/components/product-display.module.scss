@@ -1,0 +1,19 @@
+@use '../variables.scss' as var;
+
+.product-display{
+    flex:0.9 ;
+
+    .product-display__filter{
+        background-color: var.$silver-color;
+        padding:1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .no-items{
+        color:var.$light-dark-color;
+        padding:2rem 0;
+    }
+}

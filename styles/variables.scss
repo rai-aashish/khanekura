@@ -1,0 +1,27 @@
+//colors
+$primary-color: #ee4138;
+$secondary-color: #428840;
+$tertiary-color: #fa1818;
+$grey-color: #747474;
+$light-grey-color: #d4d4d4;
+$dark-color: #555555;
+$light-dark-color: #777777;
+$white-color: #fcfcfc;
+$silver-color: #f5f5f5;
+$success-color: #80BA00;
+$danger-color:#ee4138;;
+// breakPoints
+$sm: 700px;
+$md: 900px;
+$lg: 1300px;
+
+// fonts
+$main-font: "Open Sans", sans-serif;
+$desc-font: "Varela Round", sans-serif;
+
+//export
+:export {
+  sm: $sm;
+  md: $md;
+  lg: $lg;
+}

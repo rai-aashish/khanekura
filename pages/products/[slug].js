@@ -13,11 +13,13 @@ import { toast } from "react-toastify";
 import { CartContext } from "../../context/CartContextProvider";
 import { useRouter } from "next/router";
 import { SmallSpinner } from "../../components/Spinners";
+import { AuthContext } from "../../context/AuthContextProvider";
+import Head from "next/head";
 
 export default function Products({ data }) {
-  console.log(data);
   const router = useRouter();
 
+  const user = useContext(AuthContext);
   const [productQuantity, setProductQuantity] = useState(1);
   const [productNote, setProductNote] = useState("");
   const [blockSubmit, setBlockSubmit] = useState(false);
@@ -31,7 +33,7 @@ export default function Products({ data }) {
 
   // post data via api
   const addToCart = async () => {
-    if (!localStorage.getItem("access_token")) {
+    if (!user.access_token) {
       toast.info("User not logged in! LOGIN NOW.");
       localStorage.setItem("last-path", router.asPath);
       router.push("/login");
@@ -48,12 +50,25 @@ export default function Products({ data }) {
     };
     try {
       toast
-        .promise(userApi.post("cart-product", productData), {
-          pending: "Adding to cart...",
-          success: "Product added successfully",
-          error: "Ops! Something went wrong",
-        })
-        .then(() => userApi.get("cart"))
+        .promise(
+          userApi.post("cart-product", productData, {
+            headers: {
+              Authorization: user.access_token,
+            },
+          }),
+          {
+            pending: "Adding to cart...",
+            success: "Product added successfully",
+            error: "Ops! Something went wrong",
+          }
+        )
+        .then(() =>
+          userApi.get("cart", {
+            headers: {
+              Authorization: user.access_token,
+            },
+          })
+        )
         .then((res) => {
           setCartData(res.data.data);
           setBlockSubmit(false);
@@ -64,6 +79,9 @@ export default function Products({ data }) {
   };
   return (
     <Container>
+      <Head>
+        <title>{data.data.categoryTitle} | {data.data.title}</title>
+      </Head>
       <Section.Container>
         <div className={styles["product-view"]}>
           <div className={styles["cover-image"]}>

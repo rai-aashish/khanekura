@@ -9,6 +9,7 @@ import Link from "next/link";
 import { SmallSpinner } from "../components/Spinners";
 import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthContextProvider";
+import Head from "next/Head";
 
 const AxiosError = require("axios-error");
 
@@ -69,6 +70,9 @@ export default function Login() {
 
   return (
     <>
+      <Head>
+        <title>Khanekura | Login</title>
+      </Head>
       <CategoryCover title="Login" />
       <Container>
         <Section.Container>

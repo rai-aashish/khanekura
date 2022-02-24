@@ -138,7 +138,11 @@ export default function Header() {
           <ul>
             <li>
               <Link href="/">
-                <a className={`${router.asPath==="/" ? styles["active"]:""}`}>Home</a>
+                <a
+                  className={`${router.asPath === "/" ? styles["active"] : ""}`}
+                >
+                  Home
+                </a>
               </Link>
             </li>
 
@@ -147,14 +151,26 @@ export default function Header() {
             {categories?.map((category) => (
               <li key={category.id}>
                 <Link href={`/categories/${category.slug}`}>
-                  <a className={`${category.slug === slug ? styles["active"] : ""}`}>{category.title}</a>
+                  <a
+                    className={`${
+                      category.slug === slug ? styles["active"] : ""
+                    }`}
+                  >
+                    {category.title}
+                  </a>
                 </Link>
               </li>
             ))}
 
             <li>
               <Link href="/about-us">
-                <a className={`${router.asPath === "/about-us" ? styles['active']:''}`}>About Us</a>
+                <a
+                  className={`${
+                    router.asPath === "/about-us" ? styles["active"] : ""
+                  }`}
+                >
+                  About Us
+                </a>
               </Link>
             </li>
           </ul>

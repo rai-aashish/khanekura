@@ -36,7 +36,7 @@ function Cart() {
   return (
     <Container>
       <Head>
-        <title>KhaneKura | Checkout</title>
+        <title>KhaneKura | Cart</title>
       </Head>
       <Section.Container>
         {!cartData ? (

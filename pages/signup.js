@@ -7,6 +7,7 @@ import { CategoryCover } from "../components/categories/Categories";
 import Link from "next/link";
 import { SmallSpinner } from "../components/Spinners";
 import { toast } from "react-toastify";
+import Head from "next/Head";
 const AxiosError = require("axios-error");
 
 export default function Signup() {
@@ -57,6 +58,9 @@ export default function Signup() {
 
   return (
     <>
+      <Head>
+        <title>Khanekura | Sign Up</title>
+      </Head>
       <CategoryCover title="Signup" />
       <Container>
         <Section.Container>

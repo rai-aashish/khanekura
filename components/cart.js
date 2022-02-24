@@ -13,23 +13,33 @@ import { useState } from "react/cjs/react.development";
 import emptyCartImage from "../assets/images/cartEmpty.png";
 import Link from "next/link";
 import { SmallSpinner } from "./Spinners";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContextProvider";
 
 export const CartContainer = ({ children }) => {
   return <div className={styles["cart-container"]}>{children}</div>;
 };
 
-export const CartProduct = ({ productData, updateCart }) => {
+export function CartProduct({ productData, updateCart }) {
   const [blockAction, setBlockAction] = useState(false);
+  const user = useContext(AuthContext);
   //delete product
   const deleteProduct = async (productId) => {
     try {
       setBlockAction(true);
       toast
-        .promise(userApi.delete(`cart-product/${productId}`), {
-          pending: "Removing product from cart...",
-          success: "Product removed successfully",
-          error: "Ops! Something went wrong",
-        })
+        .promise(
+          userApi.delete(`cart-product/${productId}`, {
+            headers: {
+              Authorization: user.access_token,
+            },
+          }),
+          {
+            pending: "Removing product from cart...",
+            success: "Product removed successfully",
+            error: "Ops! Something went wrong",
+          }
+        )
         .then(() => updateCart)
         .then(() => setBlockAction(false));
     } catch (err) {
@@ -75,11 +85,12 @@ export const CartProduct = ({ productData, updateCart }) => {
       </div>
     </div>
   );
-};
+}
 
 const QuantityHandle = ({ quantity, cartProductId, updateCart }) => {
   const [newQuantity, setNewQuantity] = useState(quantity);
   const [blockAction, setBlockAction] = useState(false);
+  const user = useContext(AuthContext);
 
   const handleQuantityChange = (quantity) => {
     if (quantity < 1) quantity = 1;
@@ -91,9 +102,17 @@ const QuantityHandle = ({ quantity, cartProductId, updateCart }) => {
       setBlockAction(true);
       toast
         .promise(
-          userApi.patch(`cart-product/${cartProductId}`, {
-            quantity: newQuantity,
-          }),
+          userApi.patch(
+            `cart-product/${cartProductId}`,
+            {
+              quantity: newQuantity,
+            },
+            {
+              headers: {
+                Authorization: user.access_token,
+              },
+            }
+          ),
           {
             pending: "Updating product in cart...",
             success: "Cart updated successfully",

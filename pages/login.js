@@ -1,13 +1,15 @@
 import { useForm } from "react-hook-form";
 import { authApi } from "../helpers/axios";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Container, Section } from "../components/Containers";
 import styles from "../styles/pages/login.module.scss";
 import { CategoryCover } from "../components/categories/Categories";
 import Link from "next/link";
 import { SmallSpinner } from "../components/Spinners";
 import { toast } from "react-toastify";
+import { AuthContext } from "../context/AuthContextProvider";
+
 const AxiosError = require("axios-error");
 
 export default function Login() {
@@ -15,6 +17,8 @@ export default function Login() {
   const [blockAction, setBlockAction] = useState(false);
   const [nextPath, setNextPath] = useState("/");
   const [loginFail, setLoginFail] = useState(null);
+
+  const user = useContext(AuthContext);
 
   const {
     register,
@@ -44,6 +48,8 @@ export default function Login() {
           "access_token",
           `${res.data.token_type} ${res.data.access_token}`
         );
+
+        user.setData(`${res.data.token_type} ${res.data.access_token}`);
         //delete last path in localstorage upon successfull login
         localStorage.removeItem("last-path");
         setBlockAction(false);
@@ -79,16 +85,12 @@ export default function Login() {
                 <div className={styles["field-container"]}>
                   <label>Email</label>
                   {errors.username?.type === "required" ? (
-                        <span className={styles["error"]}>
-                          Email is required
-                        </span>
-                      ) : (
-                        errors.username && (
-                          <span className={styles["error"]}>
-                            Email is invalid
-                          </span>
-                        )
-                      )}
+                    <span className={styles["error"]}>Email is required</span>
+                  ) : (
+                    errors.username && (
+                      <span className={styles["error"]}>Email is invalid</span>
+                    )
+                  )}
                   <input
                     type="text"
                     {...register("username", {

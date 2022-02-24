@@ -6,18 +6,23 @@ import {
   CartProductHeader,
   CartSummary,
   EmptyCart,
-} from "../../components/cart";
+} from "../../components/Cart";
 import { CartContext } from "../../context/CartContextProvider";
 import { userApi } from "../../helpers/axios";
 import { Container, Section } from "../../components/Containers";
 import Head from "next/head";
+import { AuthContext } from "../../context/AuthContextProvider";
 
 function Cart() {
   const [cartData, setCartData] = useContext(CartContext);
-
+  const user = useContext(AuthContext);
   const updateCart = new Promise(async (resolve, reject) => {
     try {
-      const res = await userApi.get("cart");
+      const res = await userApi.get("cart", {
+        headers: {
+          Authorization: user.access_token,
+        },
+      });
       if (res) {
         setCartData(res.data.data);
         resolve(true);
@@ -27,7 +32,6 @@ function Cart() {
       console.log(err);
     }
   });
-
 
   return (
     <Container>
@@ -60,7 +64,6 @@ function Cart() {
               grandTotal={cartData.total}
               cartNumber={cartData.cartNumber}
             />
-
           </>
         ) : (
           <EmptyCart />

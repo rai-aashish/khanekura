@@ -18,7 +18,7 @@ body {
 
 a {
   text-decoration: none;
-  color: var.$dark-color;
+  color: inherit;
 
   &:hover {
     color: var.$tertiary-color;
@@ -40,7 +40,8 @@ select {
   border: 0.1rem solid rgba(var.$dark-color, 0.2);
 }
 
-input[type="submit"] ,button{
+input[type="submit"],
+button {
   cursor: pointer;
 }
 

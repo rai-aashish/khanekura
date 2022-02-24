@@ -1,9 +1,12 @@
 import { createContext, useState, useEffect } from "react";
+import { useContext } from "react/cjs/react.development";
 import { userApi } from "../helpers/axios";
+import { AuthContext } from "./AuthContextProvider";
 export const CartContext = createContext();
 
 export const CartContextProvider = ({ children }) => {
   const [cartData, setCartData] = useState(null);
+  const user = useContext(AuthContext);
 
   let access_token = null;
   if (typeof window !== "undefined") {
@@ -13,9 +16,13 @@ export const CartContextProvider = ({ children }) => {
   useEffect(() => {
     if (access_token) {
       const fetchData = async () => {
-        const res = await userApi.get("cart");
+        const res = await userApi.get("cart", {
+          headers: {
+            Authorization: user.access_token,
+          },
+        });
         if (res) {
-          setCartData(res.data.data)
+          setCartData(res.data.data);
         }
       };
 

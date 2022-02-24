@@ -29,7 +29,6 @@ function Cart() {
       }
     } catch (err) {
       reject(false);
-      console.log(err);
     }
   });
 

@@ -3,7 +3,7 @@ import {
   useState,
   useEffect,
   useContext,
-} from "react/cjs/react.production.min";
+} from "react";
 import { userApi } from "../helpers/axios";
 import { AuthContext } from "./AuthContextProvider";
 export const CartContext = createContext();
@@ -12,13 +12,8 @@ export const CartContextProvider = ({ children }) => {
   const [cartData, setCartData] = useState(null);
   const user = useContext(AuthContext);
 
-  let access_token = null;
-  if (typeof window !== "undefined") {
-    access_token = localStorage.getItem("access_token");
-  }
-
   useEffect(() => {
-    if (access_token) {
+    if (user.access_token) {
       const fetchData = async () => {
         const res = await userApi.get("cart", {
           headers: {
@@ -32,7 +27,7 @@ export const CartContextProvider = ({ children }) => {
 
       fetchData();
     }
-  }, [access_token]);
+  }, []);
 
   return (
     <CartContext.Provider value={[cartData, setCartData]}>

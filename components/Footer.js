@@ -10,7 +10,7 @@ export default function Footer() {
           <a
             href="https://facebook.com/aaces.rae"
             target="_blank"
-            referrer="noreferrer"
+            rel="noreferrer"
           >
             Aashish Rai
           </a>

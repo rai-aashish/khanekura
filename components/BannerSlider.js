@@ -27,6 +27,7 @@ function CarouselItem({ coverImage }) {
         objectFit="fill"
         layout="fill"
         priority="false"
+        alt="khanekura offer slide"
       />
     </div>
   );

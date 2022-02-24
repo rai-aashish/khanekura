@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import {useContext } from "react";
 import protectedRoute from "../../components/auth/ProtectedRoute";
 import {
   CartContainer,

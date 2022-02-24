@@ -169,7 +169,7 @@ export default function Signup() {
                       )}
                       {passwordsDontMatch && (
                         <span className={styles["error"]}>
-                          Passwords don't match
+                          Passwords don&#39;t match
                         </span>
                       )}
                       <input

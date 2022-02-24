@@ -9,7 +9,7 @@ import {
   faMinus,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react/cjs/react.production.min";
+import { useState } from "react";
 import emptyCartImage from "../assets/images/cartEmpty.png";
 import Link from "next/link";
 import { SmallSpinner } from "./Spinners";

@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
-import { useContext, useEffect } from "react/cjs/react.production.min";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContextProvider";
 import { CartContext } from "../context/CartContextProvider";
 import { AuthContext } from "../context/AuthContextProvider";
 
-export default function logout() {
+export default function Logout() {
   const router = useRouter();
   const userOptions = useContext(AuthContext);
   const [user, setUser] = useContext(UserContext);

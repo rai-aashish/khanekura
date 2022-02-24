@@ -2,11 +2,14 @@ import { CategoryCard } from "../components/Card";
 import { Container, FlexContainer, Section } from "../components/Containers";
 import { rssApi } from "../helpers/axios"; // requires a loader
 import BannerSlider from "../components/BannerSlider";
+import Head from "next/head";
 
 export default function Home({ data }) {
-
   return (
     <>
+    <Head>
+      <title>Khanekura | Kitchen in cloud</title>
+    </Head>
       <BannerSlider banners={data[0].details} />
       <Container>
         <Categories categories={data[1].categories} />
@@ -14,8 +17,6 @@ export default function Home({ data }) {
     </>
   );
 }
-
-
 
 function Categories({ categories }) {
   return (

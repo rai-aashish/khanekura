@@ -9,7 +9,7 @@ import Link from "next/link";
 import { SmallSpinner } from "../components/Spinners";
 import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthContextProvider";
-import Head from "next/Head";
+import Head from "next/head";
 
 const AxiosError = require("axios-error");
 

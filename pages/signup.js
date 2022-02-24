@@ -7,7 +7,7 @@ import { CategoryCover } from "../components/categories/Categories";
 import Link from "next/link";
 import { SmallSpinner } from "../components/Spinners";
 import { toast } from "react-toastify";
-import Head from "next/Head";
+import Head from "next/head";
 const AxiosError = require("axios-error");
 
 export default function Signup() {

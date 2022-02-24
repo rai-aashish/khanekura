@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react/cjs/react.production.min";
 import { UserContext } from "../context/UserContextProvider";
 import { CartContext } from "../context/CartContextProvider";
 import { AuthContext } from "../context/AuthContextProvider";
@@ -20,5 +19,5 @@ export default function logout() {
     });
     router.push("/login");
   }, []);
-  return <div></div>;
+  return <div>Logging out..</div>;
 }

@@ -1,5 +1,9 @@
-import { createContext, useState, useEffect } from "react";
-import { useContext } from "react/cjs/react.development";
+import {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+} from "react/cjs/react.production.min";
 import { userApi } from "../helpers/axios";
 import { AuthContext } from "./AuthContextProvider";
 export const CartContext = createContext();

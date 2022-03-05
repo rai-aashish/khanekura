@@ -9,7 +9,6 @@ import {
   faShoppingCart,
   faTrash,
   faCheck,
-  faPenSquare,
   faMarker,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useContext, useEffect } from "react";
@@ -46,9 +45,15 @@ export default function Products({ data }) {
       (product) => product.selectedUnit.id === String(data.data.id)
     );
 
-    if (index !== -1) setProductAddedIndex(index);
-    else setProductAddedIndex(-1);
+    //if product is added in cart set product index and set note of added products
+    if (index !== -1) {
+      setProductAddedIndex(index);
+      setProductNote(
+        cartData?.data?.cartProducts[productAddedIndex]?.note ?? ""
+      );
+    } else setProductAddedIndex(-1);
   }, [cartData, data]);
+
   // post data via api
   const addToCart = async () => {
     if (!user.isLogged) {
@@ -80,6 +85,21 @@ export default function Products({ data }) {
     updateCartProduct(productData);
   };
 
+  //delete product
+  const deleteProduct = () => {
+    // toast.promise(
+    //   deleteCartProduct(cartData?.data?.cartProducts[productAddedIndex]?.id),
+    //   {
+    //     pending: "Removing product...",
+    //     success: "Product removed successfully",
+    //     error: "Ops! Something went wrong",
+    //   }
+    // );
+    deleteCartProduct(cartData?.data?.cartProducts[productAddedIndex]?.id);
+    // setProductNote("");
+    // setProductQuantity(1);
+  };
+
   //simplifier functions
   function isUpdateNeeded() {
     return (
@@ -89,6 +109,7 @@ export default function Products({ data }) {
     );
   }
 
+  //buttons decider  for  item added to cart and not added items
   const CartButtonOption = () => {
     return productAddedIndex !== -1 && user.isLogged ? (
       <>
@@ -118,10 +139,7 @@ export default function Products({ data }) {
         )}
         <button
           onClick={() => {
-            if (!isProductDeleting)
-              deleteCartProduct(
-                cartData?.data?.cartProducts[productAddedIndex]?.id
-              );
+            if (!isProductDeleting) deleteProduct();
           }}
           className={styles["delete"]}
         >
@@ -133,19 +151,26 @@ export default function Products({ data }) {
         </button>
       </>
     ) : (
-      <button className={styles["submit"]} onClick={() => addToCart()}>
+      <button
+        className={styles["submit"]}
+        onClick={() => {
+          if (!isLoading) addToCart();
+        }}
+      >
         {isLoading ? (
           <>
             Adding to cart <SmallSpinner size="lg" />{" "}
           </>
         ) : (
-          "Add to cart"
-        )}{" "}
-        <FontAwesomeIcon
-          icon={faShoppingCart}
-          size="lg"
-          className={styles["icon"]}
-        />
+          <>
+            Add to cart
+            <FontAwesomeIcon
+              icon={faShoppingCart}
+              size="lg"
+              className={styles["icon"]}
+            />
+          </>
+        )}
       </button>
     );
   };

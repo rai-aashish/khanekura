@@ -31,6 +31,7 @@ export function CartProduct({ productData, updateCart }) {
             objectFit="contain"
             alt={productData.product.title}
             priority="false"
+            quality={25}
           />
         </div>
         <div>{productData.product.title}</div>

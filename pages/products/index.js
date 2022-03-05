@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 import { resourcesApi } from "../../redux/apiStore";
+import { FlexContainer } from "../../components/Containers";
+import { ProductCard } from "../../components/Card";
 
 export default function index() {
   const router = useRouter();
@@ -12,10 +14,24 @@ export default function index() {
 
   return (
     <div>
-      index
-      {queryText}
-      {categoryId}
-      {JSON.stringify(data)}
+      <FlexContainer>
+        {data?.data.map((product) => (
+          <ProductCard
+            coverImage={product.images[0].imageName}
+            title={product.title}
+            slug={product.slug}
+            category={product.categoryTitle}
+            price={product.unitPrice[0].sellingPrice}
+          />
+        ))}
+        {/* <ProductCard 
+        coverImage={}
+        title={}
+        slug={}
+        category={}
+        price={}
+        /> */}
+      </FlexContainer>
     </div>
   );
 }

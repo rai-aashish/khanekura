@@ -23,6 +23,7 @@ export function CategoryCard({ title, productNo, slug, coverImage }) {
         layout="fill"
         objectFit="cover"
         priority={false}
+        quality={25}
       />
     </div>
   );
@@ -38,6 +39,7 @@ export function ProductCard({ coverImage, title, slug, category, price }) {
           layout="fill"
           objectFit="cover"
           priority="false"
+          quality={25}
         />
         {/* explore icon*/}
         <Link href={`/products/${slug}`}>
@@ -50,11 +52,11 @@ export function ProductCard({ coverImage, title, slug, category, price }) {
       <div className={styles["product-card__desc"]}>
         <span className={styles["category"]}>{category}</span>
         <Link href={`/products/${slug}`}>
-          <a className={styles['title']}>{title}</a>
+          <a className={styles["title"]}>{title}</a>
         </Link>
         <span className={styles["price"]}>Nrs. {price}</span>
         <Link href={`/products/${slug}`}>
-          <a className={styles['shop']}>Add to Cart</a>
+          <a className={styles["shop"]}>Add to Cart</a>
         </Link>
       </div>
     </div>

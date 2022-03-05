@@ -3,13 +3,15 @@ import { Container, FlexContainer, Section } from "../components/Containers";
 import { rssApi } from "../helpers/axios"; // requires a loader
 import BannerSlider from "../components/BannerSlider";
 import Head from "next/head";
+import { userApi } from "../redux/apiStore";
 
 export default function Home({ data }) {
+  const { data: cart } = userApi.useGetCartQuery();
   return (
     <>
-    <Head>
-      <title>Khanekura | Kitchen in cloud</title>
-    </Head>
+      <Head>
+        <title>Khanekura | Kitchen in cloud</title>
+      </Head>
       <BannerSlider banners={data[0].details} />
       <Container>
         <Categories categories={data[1].categories} />

@@ -1,7 +1,5 @@
 import styles from "../styles/components/cart.module.scss";
 import Image from "next/image";
-import { userApi } from "../helpers/axios";
-import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus,
@@ -13,40 +11,16 @@ import { useState } from "react";
 import emptyCartImage from "../assets/images/cartEmpty.png";
 import Link from "next/link";
 import { SmallSpinner } from "./Spinners";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContextProvider";
+import { userApi } from "../redux/apiStore";
 
 export const CartContainer = ({ children }) => {
   return <div className={styles["cart-container"]}>{children}</div>;
 };
 
 export function CartProduct({ productData, updateCart }) {
-  const [blockAction, setBlockAction] = useState(false);
-  const user = useContext(AuthContext);
-  //delete product
-  const deleteProduct = async (productId) => {
-    try {
-      setBlockAction(true);
-      toast
-        .promise(
-          userApi.delete(`cart-product/${productId}`, {
-            headers: {
-              Authorization: user.access_token,
-            },
-          }),
-          {
-            pending: "Removing product from cart...",
-            success: "Product removed successfully",
-            error: "Ops! Something went wrong",
-          }
-        )
-        .then(() => updateCart)
-        .then(() => setBlockAction(false));
-    } catch (err) {
-      toast.error("Couldn't complete the process");
-      setBlockAction(false);
-    }
-  };
+  const [deleteCartProduct, { isLoading }] =
+    userApi.useDeleteCartProductMutation();
+
   return (
     <div className={styles["cart-item-container"]}>
       <div className={styles["cart-item"]}>
@@ -72,14 +46,10 @@ export function CartProduct({ productData, updateCart }) {
         <div>
           <button
             onClick={() => {
-              if (!blockAction) deleteProduct(productData.id);
+              if (!isLoading) deleteCartProduct(productData.id);
             }}
           >
-            {blockAction ? (
-              <SmallSpinner />
-            ) : (
-              <FontAwesomeIcon icon={faTimes} />
-            )}
+            {isLoading ? <SmallSpinner /> : <FontAwesomeIcon icon={faTimes} />}
           </button>
         </div>
       </div>
@@ -87,10 +57,10 @@ export function CartProduct({ productData, updateCart }) {
   );
 }
 
-const QuantityHandle = ({ quantity, cartProductId, updateCart }) => {
+const QuantityHandle = ({ quantity, cartProductId }) => {
   const [newQuantity, setNewQuantity] = useState(quantity);
-  const [blockAction, setBlockAction] = useState(false);
-  const user = useContext(AuthContext);
+  const [updateCartProduct, { isLoading }] =
+    userApi.useUpdateCartProductMutation();
 
   const handleQuantityChange = (quantity) => {
     if (quantity < 1) quantity = 1;
@@ -98,52 +68,30 @@ const QuantityHandle = ({ quantity, cartProductId, updateCart }) => {
   };
 
   const handleQuantityUpdate = async () => {
-    try {
-      setBlockAction(true);
-      toast
-        .promise(
-          userApi.patch(
-            `cart-product/${cartProductId}`,
-            {
-              quantity: newQuantity,
-            },
-            {
-              headers: {
-                Authorization: user.access_token,
-              },
-            }
-          ),
-          {
-            pending: "Updating product in cart...",
-            success: "Cart updated successfully",
-            error: "Ops! Something went wrong",
-          }
-        )
-        .then(() => updateCart)
-        .then(() => setBlockAction(false));
-    } catch (err) {
-      console.log(err);
-      setBlockAction(false);
-    }
+    let productData = {
+      productId: cartProductId,
+      quantity: newQuantity,
+    };
+    updateCartProduct(productData);
   };
 
   return (
     <div className={styles["cart-item__handle-quantity"]}>
-      <button onClick={() => handleQuantityChange(newQuantity + 1)}>
-        <FontAwesomeIcon icon={faPlus} />
-      </button>
-      <span>{newQuantity}</span>
       <button onClick={() => handleQuantityChange(newQuantity - 1)}>
         <FontAwesomeIcon icon={faMinus} />
+      </button>
+      <span>{newQuantity}</span>
+      <button onClick={() => handleQuantityChange(newQuantity + 1)}>
+        <FontAwesomeIcon icon={faPlus} />
       </button>
       {quantity != newQuantity && (
         <button
           onClick={() => {
-            if (!blockAction) handleQuantityUpdate();
+            if (!isLoading) handleQuantityUpdate();
           }}
           className={styles["update-btn"]}
         >
-          {blockAction ? <SmallSpinner /> : <FontAwesomeIcon icon={faCheck} />}
+          {isLoading ? <SmallSpinner /> : <FontAwesomeIcon icon={faCheck} />}
         </button>
       )}
     </div>

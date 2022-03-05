@@ -1,4 +1,4 @@
-import { rssApi, userApi } from "../../helpers/axios";
+import { rssApi } from "../../helpers/axios";
 import Image from "next/image";
 import styles from "../../styles/pages/product.module.scss";
 import { Container, Section } from "../../components/Containers";
@@ -7,23 +7,33 @@ import {
   faPlus,
   faMinus,
   faShoppingCart,
+  faTrash,
+  faCheck,
+  faPenSquare,
+  faMarker,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
-import { CartContext } from "../../context/CartContextProvider";
 import { useRouter } from "next/router";
 import { SmallSpinner } from "../../components/Spinners";
-import { AuthContext } from "../../context/AuthContextProvider";
 import Head from "next/head";
+import { userApi } from "../../redux/apiStore";
+import { UserContext } from "../../context/UserContextProvider";
 
 export default function Products({ data }) {
   const router = useRouter();
 
-  const user = useContext(AuthContext);
+  const [user] = useContext(UserContext);
   const [productQuantity, setProductQuantity] = useState(1);
   const [productNote, setProductNote] = useState("");
-  const [blockSubmit, setBlockSubmit] = useState(false);
-  const [cartData, setCartData] = useContext(CartContext);
+  const [productAddedIndex, setProductAddedIndex] = useState(-1);
+
+  const { data: cartData } = userApi.useGetCartQuery();
+  const [updateCartProduct, { isLoading: isCartUpdating }] =
+    userApi.useUpdateCartProductMutation();
+  const [addCartProduct, { isLoading }] = userApi.useAddCartProductMutation();
+  const [deleteCartProduct, { isLoading: isProductDeleting }] =
+    userApi.useDeleteCartProductMutation();
 
   //handle product quantity
   const handleProductQuantity = (quantity) => {
@@ -31,56 +41,121 @@ export default function Products({ data }) {
     setProductQuantity(quantity);
   };
 
+  useEffect(() => {
+    let index = cartData?.data?.cartProducts?.findIndex(
+      (product) => product.selectedUnit.id === String(data.data.id)
+    );
+
+    if (index !== -1) setProductAddedIndex(index);
+    else setProductAddedIndex(-1);
+  }, [cartData, data]);
   // post data via api
   const addToCart = async () => {
-    if (!user.access_token) {
+    if (!user.isLogged) {
       toast.info("User not logged in! LOGIN NOW.");
       localStorage.setItem("last-path", router.asPath);
       router.push("/login");
       return 0;
     }
 
-    setBlockSubmit(true);
+    if (!isLoading) {
+      let productData = {
+        productId: data.data.id,
+        priceId: data.data.unitPrice[0].id,
+        quantity: productQuantity,
+        note: productNote,
+      };
 
+      addCartProduct(productData);
+    }
+  };
+
+  //update cart products if already in cart
+  const updateCart = () => {
     let productData = {
-      productId: data.data.id,
-      priceId: data.data.unitPrice[0].id,
+      productId: cartData?.data?.cartProducts[productAddedIndex]?.id,
       quantity: productQuantity,
       note: productNote,
     };
-    try {
-      toast
-        .promise(
-          userApi.post("cart-product", productData, {
-            headers: {
-              Authorization: user.access_token,
-            },
-          }),
-          {
-            pending: "Adding to cart...",
-            success: "Product added successfully",
-            error: "Ops! Something went wrong",
-          }
-        )
-        .then(() =>
-          userApi.get("cart", {
-            headers: {
-              Authorization: user.access_token,
-            },
-          })
-        )
-        .then((res) => {
-          setCartData(res.data.data);
-          setBlockSubmit(false);
-        });
-    } catch (err) {
-      setBlockSubmit(false);
-    }
+    updateCartProduct(productData);
   };
+
+  //simplifier functions
+  function isUpdateNeeded() {
+    return (
+      cartData?.data?.cartProducts[productAddedIndex]?.quantity !==
+        productQuantity ||
+      cartData?.data?.cartProducts[productAddedIndex]?.note !== productNote
+    );
+  }
+
+  const CartButtonOption = () => {
+    return productAddedIndex !== -1 && user.isLogged ? (
+      <>
+        {!isUpdateNeeded() ? (
+          <button className={styles["submit"]}>
+            Added to cart
+            <FontAwesomeIcon icon={faCheck} className={styles["icon"]} />
+          </button>
+        ) : (
+          <button
+            className={styles["submit"]}
+            onClick={() => {
+              if (isUpdateNeeded()) updateCart();
+            }}
+          >
+            {isCartUpdating ? (
+              <>
+                Updating product <SmallSpinner size="lg" />
+              </>
+            ) : (
+              <>
+                Update product{" "}
+                <FontAwesomeIcon icon={faMarker} className={styles["icon"]} />
+              </>
+            )}
+          </button>
+        )}
+        <button
+          onClick={() => {
+            if (!isProductDeleting)
+              deleteCartProduct(
+                cartData?.data?.cartProducts[productAddedIndex]?.id
+              );
+          }}
+          className={styles["delete"]}
+        >
+          {isProductDeleting ? (
+            <SmallSpinner size="lg" />
+          ) : (
+            <FontAwesomeIcon icon={faTrash} size="lg" />
+          )}
+        </button>
+      </>
+    ) : (
+      <button className={styles["submit"]} onClick={() => addToCart()}>
+        {isLoading ? (
+          <>
+            Adding to cart <SmallSpinner size="lg" />{" "}
+          </>
+        ) : (
+          "Add to cart"
+        )}{" "}
+        <FontAwesomeIcon
+          icon={faShoppingCart}
+          size="lg"
+          className={styles["icon"]}
+        />
+      </button>
+    );
+  };
+
   return (
     <Container>
       <Head>
-        <title>{data.data.categoryTitle} | {data.data.title}</title>
+        <title>
+          {data.data.categoryTitle} | {data.data.title}
+        </title>
       </Head>
       <Section.Container>
         <div className={styles["product-view"]}>
@@ -138,20 +213,7 @@ export default function Products({ data }) {
                   <FontAwesomeIcon icon={faPlus} size="lg" />
                 </span>
               </div>
-              <button
-                className={styles["submit"]}
-                onClick={() => {
-                  if (!blockSubmit) addToCart();
-                }}
-              >
-                Add to Cart
-                <FontAwesomeIcon
-                  icon={faShoppingCart}
-                  size="lg"
-                  className={styles["icon"]}
-                />
-                {blockSubmit && <SmallSpinner size="lg" />}
-              </button>
+              <CartButtonOption />
             </div>
           </div>
         </div>

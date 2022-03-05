@@ -1,6 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/UserContextProvider";
-import { CartContext } from "../context/CartContextProvider";
 import { DeviceContext } from "../context/DeviceContextProvider";
 import Link from "next/link";
 import styles from "../styles/components/header.module.scss";
@@ -16,8 +15,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useInView } from "react-intersection-observer";
 import { Container } from "./Containers";
-import { useCategories } from "../hooks/categories";
 import { useRouter } from "next/router";
+import { resourcesApi, userApi } from "../redux/apiStore";
+import { useDispatch, useSelector } from "react-redux";
+import { setCartData } from "../redux/userSlice";
 
 export default function Header() {
   const [user] = useContext(UserContext);
@@ -81,7 +82,9 @@ export default function Header() {
 
   //nav
   function NavBar() {
-    const { categories, isLoading } = useCategories();
+    const { data: categories, isLoading } =
+      resourcesApi.useGetCategoriesQuery();
+
     const [showNav, setShowNav] = useState(false);
     const [isMobile] = useContext(DeviceContext);
 
@@ -106,7 +109,7 @@ export default function Header() {
 
             {/* fetch all categories data freom api */}
             {isLoading && <span>Loading...</span>}
-            {categories?.map((category) => (
+            {categories?.data.map((category) => (
               <li key={category.id}>
                 <Link href={`/categories/${category.slug}`}>
                   <a>{category.title}</a>
@@ -146,9 +149,9 @@ export default function Header() {
               </Link>
             </li>
 
-            {/* fetch all categories data freom api */}
+            {/* display all categories data fetched freom api */}
             {isLoading && <span>Loading...</span>}
-            {categories?.map((category) => (
+            {categories?.data?.map((category) => (
               <li key={category.id}>
                 <Link href={`/categories/${category.slug}`}>
                   <a
@@ -198,16 +201,21 @@ export default function Header() {
     );
   }
 
+  //cart component
+
   function Cart() {
-    const [cartData] = useContext(CartContext);
+    const { data: cartData } = userApi.useGetCartQuery();
+    const [user, setUser] = useContext(UserContext);
 
     return (
       <div className={styles["cart"]}>
         <Link href="/user/cart">
           <a>
-            <span className={styles["product-no"]}>
-              {cartData?.cartProducts.length}
-            </span>
+            {user.isLogged && (
+              <span className={styles["product-no"]}>
+                {cartData?.data?.cartProducts.length}
+              </span>
+            )}
             <FontAwesomeIcon size="2x" icon={faShoppingCart} />
           </a>
         </Link>
@@ -216,17 +224,29 @@ export default function Header() {
   }
 }
 
+//searchBar
 const SearchBar = () => {
+  const [queryText, setQueryText] = useState("");
+  const router = useRouter();
+
+  const search = (e) => {
+    e.preventDefault();
+
+    if (queryText !== "") router.push(`/products?queryText=${queryText}`);
+  };
   return (
-    <form>
-      <ButtonGroup>
-        <input type="text" placeholder="eg: momo" />
+    <form className={styles["search-form"]} onSubmit={search}>
+      <div className={styles["search-field"]}>
+        <input
+          type="text"
+          placeholder="eg: momo"
+          value={queryText}
+          onChange={(e) => setQueryText(e.target.value)}
+        />
         <button type="submit">
-          <span className={styles["icon"]}>
-            <FontAwesomeIcon icon={faSearch} size="lg" />
-          </span>
+          <FontAwesomeIcon icon={faSearch} size="lg" />
         </button>
-      </ButtonGroup>
+      </div>
     </form>
   );
 };

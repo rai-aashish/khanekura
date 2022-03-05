@@ -10,8 +10,8 @@
 
   .cart-item {
     display: flex;
-    
-  width: clamp(70rem, 100%, 100rem);
+
+    width: clamp(70rem, 100%, 100rem);
     padding: 1rem;
     border-bottom: 0.1rem solid var.$light-grey-color;
 
@@ -115,22 +115,21 @@
     }
   }
 
-  .checkout{
-
+  .checkout {
     margin: 2rem;
     display: flex;
     justify-content: flex-end;
 
-    a{
+    a {
       display: inline-block;
       background-color: var.$success-color;
-      color:var.$white-color;
-      padding: 1rem 2rem ;
+      color: var.$white-color;
+      padding: 1rem 2rem;
       border-radius: 1rem;
       font-weight: 600;
       transition: all 0.4s ease;
 
-      &:hover{
+      &:hover {
         background-color: var.$primary-color;
       }
     }

@@ -1,4 +1,4 @@
-import {useContext } from "react";
+import { useCallback } from "react";
 import protectedRoute from "../../components/auth/ProtectedRoute";
 import {
   CartContainer,
@@ -7,61 +7,50 @@ import {
   CartSummary,
   EmptyCart,
 } from "../../components/Cart";
-import { CartContext } from "../../context/CartContextProvider";
-import { userApi } from "../../helpers/axios";
 import { Container, Section } from "../../components/Containers";
 import Head from "next/head";
-import { AuthContext } from "../../context/AuthContextProvider";
+import { userApi } from "../../redux/apiStore";
 
 function Cart() {
-  const [cartData, setCartData] = useContext(CartContext);
-  const user = useContext(AuthContext);
-  const updateCart = new Promise(async (resolve, reject) => {
-    try {
-      const res = await userApi.get("cart", {
-        headers: {
-          Authorization: user.access_token,
-        },
-      });
-      if (res) {
-        setCartData(res.data.data);
-        resolve(true);
-      }
-    } catch (err) {
-      reject(false);
-    }
-  });
+  const { data: cart, isLoading} = userApi.useGetCartQuery();
+  const [updateCartProduct] = userApi.useUpdateCartProductMutation();
+
+  const onUpdateProduct = useCallback(
+    (productData) => updateCartProduct(productData),
+    [updateCartProduct]
+  );
 
   return (
     <Container>
       <Head>
         <title>KhaneKura | Cart</title>
       </Head>
+
       <Section.Container>
-        {!cartData ? (
+        {isLoading ? (
           <div>Loading...</div>
-        ) : cartData.cartProducts.length !== 0 ? (
+        ) : cart?.data.cartProducts.length !== 0 ? (
           <>
             <div>
-              {cartData.cartProducts.length === 0 && <p>No items in cart</p>}
+              {cart?.data.cartProducts.length === 0 && <p>No items in cart</p>}
             </div>
             <CartContainer>
               <CartProductHeader />
-              {cartData.cartProducts.map((productData) => (
+              {cart?.data.cartProducts.map((productData) => (
                 <CartProduct
                   key={productData.id}
-                  updateCart={updateCart}
                   productData={productData}
+                  updateCart={onUpdateProduct}
                 />
               ))}
             </CartContainer>
             <CartSummary
-              productCost={cartData.orderAmount}
-              subTotal={cartData.subTotal}
-              discount={cartData.discount}
-              deliveryCharge={cartData.deliveryCharge}
-              grandTotal={cartData.total}
-              cartNumber={cartData.cartNumber}
+              productCost={cart?.data.orderAmount}
+              subTotal={cart?.data.subTotal}
+              discount={cart?.data.discount}
+              deliveryCharge={cart?.data.deliveryCharge}
+              grandTotal={cart?.data.total}
+              cartNumber={cart?.data.cartNumber}
             />
           </>
         ) : (

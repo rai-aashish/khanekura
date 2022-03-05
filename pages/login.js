@@ -1,25 +1,26 @@
 import { useForm } from "react-hook-form";
 import { authApi } from "../helpers/axios";
 import { useRouter } from "next/router";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Container, Section } from "../components/Containers";
 import styles from "../styles/pages/login.module.scss";
 import { CategoryCover } from "../components/categories/Categories";
 import Link from "next/link";
 import { SmallSpinner } from "../components/Spinners";
 import { toast } from "react-toastify";
-import { AuthContext } from "../context/AuthContextProvider";
 import Head from "next/head";
+import {loginUser} from '../redux/userSlice';
+import { useDispatch } from "react-redux";
 
 const AxiosError = require("axios-error");
 
 export default function Login() {
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const [blockAction, setBlockAction] = useState(false);
   const [nextPath, setNextPath] = useState("/");
   const [loginFail, setLoginFail] = useState(null);
-
-  const user = useContext(AuthContext);
 
   const {
     register,
@@ -33,8 +34,8 @@ export default function Login() {
   }, []);
 
   const onSubmit = async (data) => {
-    data["client_id"] = "2";
-    data["client_secret"] = "ZkPYPKRiUsEzVke7Q5sq21DrVvYmNK5w5bZKGzQo";
+    data["client_id"] = process.env.NEXT_PUBLIC_CLIENT_ID;
+    data["client_secret"] = process.env.NEXT_PUBLIC_CLIENT_SECRET;
     data["grant_type"] = "password";
 
     try {
@@ -50,7 +51,6 @@ export default function Login() {
           `${res.data.token_type} ${res.data.access_token}`
         );
 
-        user.setData(`${res.data.token_type} ${res.data.access_token}`);
         //delete last path in localstorage upon successfull login
         localStorage.removeItem("last-path");
         setBlockAction(false);

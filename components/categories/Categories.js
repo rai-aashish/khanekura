@@ -1,7 +1,7 @@
 import styles from "../../styles/components/categories/categories-slug.module.scss";
 import Link from "next/link";
-import { useCategories } from "../../hooks/categories";
 import { useRouter } from "next/router";
+import { resourcesApi } from "../../redux/apiStore";
 
 export function CategoryCover({ title }) {
   return (
@@ -17,7 +17,7 @@ export function CategoryCover({ title }) {
 }
 
 export function CategoriesList() {
-  const { categories, isLoading } = useCategories();
+  const { data: categories, isLoading } = resourcesApi.useGetCategoriesQuery();
   const router = useRouter();
   const { slug } = router.query;
 
@@ -26,7 +26,7 @@ export function CategoriesList() {
       <h3>Categories</h3>
       <ul>
         {categories &&
-          categories.map((category) => (
+          categories?.data.map((category) => (
             <li
               key={category.id}
               className={`${category.slug === slug ? styles["active"] : ""}`}

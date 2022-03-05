@@ -61,7 +61,7 @@ export default function ProductDisplay({ products }) {
     setSortedProducts(null);
     const sortData = async () => {
       const data = await sortBy(sortMethod, products);
-      console.log(data);
+      //console.log(data);
       setSortedProducts(data);
     };
     sortData();

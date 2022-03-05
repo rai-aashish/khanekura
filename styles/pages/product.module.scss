@@ -10,7 +10,7 @@
 
   .cover-image {
     position: relative;
-    border-radius:0.8rem;
+    border-radius: 0.8rem;
     overflow: hidden;
     width: min(100%, 50rem);
     aspect-ratio: 1/1;
@@ -28,20 +28,20 @@
       }
 
       &.price {
-          color:var.$success-color;
-          font-size: 1.8rem;
+        color: var.$success-color;
+        font-size: 1.8rem;
       }
 
-      &.note{
-        input{
-          width:min(80%,40rem);
+      &.note {
+        input {
+          width: min(80%, 40rem);
           min-height: 6rem;
-          color:var.$grey-color;
+          color: var.$grey-color;
         }
       }
 
       &.description {
-          margin: 0;
+        margin: 0;
       }
     }
   }
@@ -73,21 +73,33 @@
       }
     }
 
-    button.submit {
-      background-color: var.$success-color;
-      color: var.$white-color;
+    button {
       border-radius: 0.8rem;
       font-weight: 600;
       font-size: 1.7rem;
-      padding:1rem 4rem;
+      padding: 1rem 1.5rem;
       transition: all 0.4s ease;
+      color: var.$white-color;
 
-      .icon{
-          margin-left:0.8rem;
+      &.submit {
+        background-color: var.$success-color;
+        .icon {
+          margin-left: 0.8rem;
+        }
       }
 
-      &:hover{
-          background-color:var.$primary-color;
+      &.delete {
+        background-color: var.$danger-color;
+        border: 0.3rem solid var.$danger-color;
+
+        &:hover {
+          background-color: var.$white-color;
+          color: var.$danger-color;
+        }
+      }
+
+      &:hover {
+        background-color: var.$primary-color;
       }
     }
   }

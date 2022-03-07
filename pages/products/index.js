@@ -1,37 +1,34 @@
 import { useRouter } from "next/router";
 import { resourcesApi } from "../../redux/apiStore";
-import { FlexContainer } from "../../components/Containers";
-import { ProductCard } from "../../components/Card";
+import { Container, Section } from "../../components/Containers";
+import { SmallSpinner } from "../../components/Spinners";
+import ProductDisplay from "../../components/ProductDisplay";
 
 export default function index() {
   const router = useRouter();
   const { queryText, categoryId } = router.query;
 
-  const { data, isLoading } = resourcesApi.useSearchProductQuery(
+  const { data, isLoading, isSuccess } = resourcesApi.useSearchProductQuery(
     queryText,
     categoryId
   );
 
   return (
-    <div>
-      <FlexContainer>
-        {data?.data.map((product) => (
-          <ProductCard
-            coverImage={product.images[0].imageName}
-            title={product.title}
-            slug={product.slug}
-            category={product.categoryTitle}
-            price={product.unitPrice[0].sellingPrice}
-          />
-        ))}
-        {/* <ProductCard 
-        coverImage={}
-        title={}
-        slug={}
-        category={}
-        price={}
-        /> */}
-      </FlexContainer>
-    </div>
+    <Container>
+      <Section.Container>
+        <Section.Title
+          title={`Displaying ${data?.data?.length} products for query "${queryText}" `}
+        ></Section.Title>
+
+        {/* spinner while loading */}
+        {isLoading && (
+          <center>
+            <SmallSpinner size="5x" />
+          </center>
+        )}
+        {/* //display search results */}
+        {isSuccess && <ProductDisplay products={data?.data} />}
+      </Section.Container>
+    </Container>
   );
 }

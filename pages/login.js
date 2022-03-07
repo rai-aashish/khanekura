@@ -9,14 +9,16 @@ import Link from "next/link";
 import { SmallSpinner } from "../components/Spinners";
 import { toast } from "react-toastify";
 import Head from "next/head";
-import {loginUser} from '../redux/userSlice';
+import { loginUser } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
+import { userApi } from "../redux/apiStore";
 
 const AxiosError = require("axios-error");
 
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
+  // const {data:cart} = userApi.useGetCartQuery();
 
   const [blockAction, setBlockAction] = useState(false);
   const [nextPath, setNextPath] = useState("/");
@@ -46,6 +48,7 @@ export default function Login() {
         error: "Ops! Something went wrong",
       });
       if (res && res.status === 200) {
+       // userApi.useGetCartQuery();
         localStorage.setItem(
           "access_token",
           `${res.data.token_type} ${res.data.access_token}`

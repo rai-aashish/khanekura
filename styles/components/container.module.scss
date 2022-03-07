@@ -12,6 +12,7 @@
   &--fluid {
     max-width: unset;
   }
+
 }
 
 .flex-container {
@@ -23,6 +24,10 @@
 
   &.justify-center {
     justify-content: center;
+  }
+
+  &.flex-start {
+    justify-content: flex-start;
   }
 }
 
@@ -46,7 +51,7 @@
   }
 
   > div:nth-child(2) {
-    padding:0 1rem;
+    padding: 0 1rem;
   }
 
   @media (max-width: var.$sm) {

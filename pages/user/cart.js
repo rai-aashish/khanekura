@@ -3,7 +3,6 @@ import protectedRoute from "../../components/auth/ProtectedRoute";
 import {
   CartContainer,
   CartProduct,
-  CartProductHeader,
   CartSummary,
   EmptyCart,
 } from "../../components/Cart";
@@ -12,7 +11,7 @@ import Head from "next/head";
 import { userApi } from "../../redux/apiStore";
 
 function Cart() {
-  const { data: cart, isLoading} = userApi.useGetCartQuery();
+  const { data: cart, isLoading } = userApi.useGetCartQuery();
   const [updateCartProduct] = userApi.useUpdateCartProductMutation();
 
   const onUpdateProduct = useCallback(
@@ -27,6 +26,7 @@ function Cart() {
       </Head>
 
       <Section.Container>
+        <Section.Title title="Cart" />
         {isLoading ? (
           <div>Loading...</div>
         ) : cart?.data.cartProducts.length !== 0 ? (
@@ -35,7 +35,6 @@ function Cart() {
               {cart?.data.cartProducts.length === 0 && <p>No items in cart</p>}
             </div>
             <CartContainer>
-              <CartProductHeader />
               {cart?.data.cartProducts.map((productData) => (
                 <CartProduct
                   key={productData.id}

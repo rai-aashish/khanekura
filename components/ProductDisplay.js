@@ -9,19 +9,12 @@ export default function ProductDisplay({ products }) {
 
   const sortBy = (method, products) => {
     let temp = [];
+    let items = [...products];
 
     const sortPromise = new Promise((resolve, reject) => {
       switch (method) {
-        case "AtoZ":
-          temp = products.sort(function (a, b) {
-            if (a.title > b.title) return 1;
-            else if (a.title < b.title) return -1;
-            else return 0;
-          });
-          break;
-
         case "ZtoA":
-          temp = products.sort(function (a, b) {
+          temp = items.sort(function (a, b) {
             if (a.title < b.title) return 1;
             else if (a.title > b.title) return -1;
             else return 0;
@@ -29,7 +22,7 @@ export default function ProductDisplay({ products }) {
           break;
 
         case "HtoL":
-          temp = products.sort(function (a, b) {
+          temp = items.sort(function (a, b) {
             if (a.unitPrice[0].sellingPrice < b.unitPrice[0].sellingPrice)
               return 1;
             else if (a.unitPrice[0].sellingPrice > b.unitPrice[0].sellingPrice)
@@ -39,7 +32,7 @@ export default function ProductDisplay({ products }) {
           break;
 
         case "LtoH":
-          temp = products.sort(function (a, b) {
+          temp = items.sort(function (a, b) {
             if (a.unitPrice[0].sellingPrice > b.unitPrice[0].sellingPrice)
               return 1;
             else if (a.unitPrice[0].sellingPrice < b.unitPrice[0].sellingPrice)
@@ -48,8 +41,13 @@ export default function ProductDisplay({ products }) {
           });
           break;
 
+        //"AtoZ":
         default:
-          temp = products;
+          temp = items.sort(function (a, b) {
+            if (a.title > b.title) return 1;
+            else if (a.title < b.title) return -1;
+            else return 0;
+          });
           break;
       }
       resolve(temp);
@@ -84,7 +82,6 @@ export default function ProductDisplay({ products }) {
           </select>
         </div>
       </div>
-
       <FlexContainer>
         {sortedProducts
           ? sortedProducts.map((product) => (

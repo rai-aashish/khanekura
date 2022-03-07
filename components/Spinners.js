@@ -11,3 +11,5 @@ export function SmallSpinner({size}){
         <FontAwesomeIcon icon={faSpinner} size={size} className={styles['small-spinner']}/>
     )
 }
+
+

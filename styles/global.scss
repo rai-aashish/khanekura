@@ -48,3 +48,9 @@ button {
 ::placeholder {
   color: var.$light-grey-color;
 }
+
+.container {
+  width: min(110rem, 90%);
+  padding: 0.5rem;
+  margin: auto;
+}

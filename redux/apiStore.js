@@ -17,11 +17,16 @@ export const userApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Cart"],
+  tagTypes: ["User"],
   endpoints: (builder) => ({
-    getAll: builder.query({
-      query: () => `todos`,
-      providesTags: [{ type: "Cart", id: "LIST" }],
+    getProfile: builder.query({
+      query() {
+        return {
+          url: "profile/show",
+          method: "GET",
+        };
+      },
+      providesTags: [{ type: "User", id: "PROFILE" }],
     }),
     getCart: builder.query({
       query() {
@@ -30,7 +35,7 @@ export const userApi = createApi({
           method: "GET",
         };
       },
-      providesTags: [{ type: "Cart", id: "LIST" }],
+      providesTags: [{ type: "User", id: "CART" }],
     }),
     addCartProduct: builder.mutation({
       query(productData) {
@@ -41,7 +46,7 @@ export const userApi = createApi({
           body: productData,
         };
       },
-      invalidatesTags: [{ type: "Cart", id: "LIST" }],
+      invalidatesTags: [{ type: "User", id: "CART" }],
     }),
     updateCartProduct: builder.mutation({
       query(productData) {
@@ -52,7 +57,7 @@ export const userApi = createApi({
           body: productData,
         };
       },
-      invalidatesTags: [{ type: "Cart", id: "LIST" }],
+      invalidatesTags: [{ type: "User", id: "CART" }],
     }),
     deleteCartProduct: builder.mutation({
       query(id) {
@@ -61,7 +66,7 @@ export const userApi = createApi({
           method: "DELETE",
         };
       },
-      invalidatesTags: [{ type: "Cart", id: "LIST" }],
+      invalidatesTags: [{ type: "User", id: "CART" }],
     }),
   }),
 });

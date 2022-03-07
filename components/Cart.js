@@ -14,7 +14,14 @@ import { SmallSpinner } from "./Spinners";
 import { userApi } from "../redux/apiStore";
 
 export const CartContainer = ({ children }) => {
-  return <div className={styles["cart-container"]}>{children}</div>;
+  return (
+    <div className={styles["cart-container"]}>
+      <div className={styles["cart-item-container"]}>
+        <CartProductHeader />
+        {children}
+      </div>
+    </div>
+  );
 };
 
 export function CartProduct({ productData, updateCart }) {
@@ -22,37 +29,35 @@ export function CartProduct({ productData, updateCart }) {
     userApi.useDeleteCartProductMutation();
 
   return (
-    <div className={styles["cart-item-container"]}>
-      <div className={styles["cart-item"]}>
-        <div>
-          <Image
-            src={productData.product.images[0].imageName}
-            layout="fill"
-            objectFit="contain"
-            alt={productData.product.title}
-            priority="false"
-            quality={25}
-          />
-        </div>
-        <div>{productData.product.title}</div>
-        <div>Nrs.{productData.product.unitPrice[0].sellingPrice}</div>
-        <div>
-          <QuantityHandle
-            quantity={productData.quantity}
-            cartProductId={productData.id}
-            updateCart={updateCart}
-          />
-        </div>
-        <div>Nrs.{productData.price}</div>
-        <div>
-          <button
-            onClick={() => {
-              if (!isLoading) deleteCartProduct(productData.id);
-            }}
-          >
-            {isLoading ? <SmallSpinner /> : <FontAwesomeIcon icon={faTimes} />}
-          </button>
-        </div>
+    <div className={styles["cart-item"]}>
+      <div>
+        <Image
+          src={productData.product.images[0].imageName}
+          layout="fill"
+          objectFit="contain"
+          alt={productData.product.title}
+          priority="false"
+          quality={25}
+        />
+      </div>
+      <div>{productData.product.title}</div>
+      <div>Nrs.{productData.product.unitPrice[0].sellingPrice}</div>
+      <div>
+        <QuantityHandle
+          quantity={productData.quantity}
+          cartProductId={productData.id}
+          updateCart={updateCart}
+        />
+      </div>
+      <div>Nrs.{productData.price}</div>
+      <div>
+        <button
+          onClick={() => {
+            if (!isLoading) deleteCartProduct(productData.id);
+          }}
+        >
+          {isLoading ? <SmallSpinner /> : <FontAwesomeIcon icon={faTimes} />}
+        </button>
       </div>
     </div>
   );
@@ -102,15 +107,13 @@ const QuantityHandle = ({ quantity, cartProductId }) => {
 //header
 export const CartProductHeader = () => {
   return (
-    <div className={styles["cart-item-container"]}>
-      <div className={`${styles["cart-item"]} ${styles["cart-item--header"]}`}>
-        <div>Image </div>
-        <div>Name</div>
-        <div>Unit cost</div>
-        <div>Quantity</div>
-        <div>Sub total</div>
-        <div>Remove</div>
-      </div>
+    <div className={`${styles["cart-item"]} ${styles["cart-item--header"]}`}>
+      <div>Image </div>
+      <div>Name</div>
+      <div>Unit cost</div>
+      <div>Quantity</div>
+      <div>Sub total</div>
+      <div>Remove</div>
     </div>
   );
 };

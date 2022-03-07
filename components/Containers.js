@@ -2,9 +2,8 @@ import styles from "../styles/components/container.module.scss";
 
 export const FlexContainer = ({ children, modifierClass }) => {
   return (
-    <div className={styles["flex-container"] + " " + styles[modifierClass]}>
+    <div className={styles[`flex-container`] + " " + styles[modifierClass]}>
       {children}
-      {modifierClass}
     </div>
   );
 };
@@ -23,6 +22,10 @@ export const Container = ({ children, fluid }) => {
       {children}
     </div>
   );
+};
+
+Container.defaultProps = {
+  fluid: false,
 };
 
 export const Section = {

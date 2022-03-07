@@ -248,9 +248,29 @@ export default function Products({ data }) {
 }
 
 //serverside
-export async function getServerSideProps(context) {
-  const { slug } = context.query;
-  const res = await rssApi.get(`product/${slug}`);
+// export async function getServerSideProps(context) {
+//   const { slug } = context.query;
+//   const res = await rssApi.get(`product/${slug}`);
+
+//   if (!res)
+//     return {
+//       notFound: true,
+//     };
+
+//   return {
+//     props: {
+//       data: res.data,
+//     },
+//   };
+// }
+
+//ISR implementation
+
+// This function gets called at build time on server-side.
+// It may be called again, on a serverless function, if
+// revalidation is enabled and a new request comes in
+export async function getStaticProps({ params }) {
+  const res = await rssApi.get(`product/${params.slug}`);
 
   if (!res)
     return {
@@ -261,5 +281,26 @@ export async function getServerSideProps(context) {
     props: {
       data: res.data,
     },
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most once every 10 seconds
+    revalidate: 60, // In seconds
   };
+}
+
+// This function gets called at build time on server-side.
+// It may be called again, on a serverless function, if
+// the path has not been generated.
+export async function getStaticPaths() {
+  const res = await rssApi.get(`product`);
+
+  // Get the paths we want to pre-render based on posts
+  const paths = res.data.data.map((product) => ({
+    params: { slug: product.slug },
+  }));
+
+  // We'll pre-render only these paths at build time.
+  // { fallback: blocking } will server-render pages
+  // on-demand if the path doesn't exist.
+  return { paths, fallback: "blocking" };
 }

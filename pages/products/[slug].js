@@ -247,28 +247,7 @@ export default function Products({ data }) {
   );
 }
 
-//serverside
-// export async function getServerSideProps(context) {
-//   const { slug } = context.query;
-//   const res = await rssApi.get(`product/${slug}`);
-
-//   if (!res)
-//     return {
-//       notFound: true,
-//     };
-
-//   return {
-//     props: {
-//       data: res.data,
-//     },
-//   };
-// }
-
 //ISR implementation
-
-// This function gets called at build time on server-side.
-// It may be called again, on a serverless function, if
-// revalidation is enabled and a new request comes in
 export async function getStaticProps({ params }) {
   const res = await rssApi.get(`product/${params.slug}`);
 
@@ -304,3 +283,4 @@ export async function getStaticPaths() {
   // on-demand if the path doesn't exist.
   return { paths, fallback: "blocking" };
 }
+

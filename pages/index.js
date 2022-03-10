@@ -43,11 +43,12 @@ function Categories({ categories }) {
 }
 
 //
-export async function getServerSideProps(context) {
+export async function getStaticProps() {
   try {
     const data = await rssApi.get("newhome");
     return {
       props: { data: data.data.data }, // will be passed to the page component as props
+      revalidate: 60,
     };
   } catch (err) {
     return {

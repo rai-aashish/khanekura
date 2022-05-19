@@ -5,7 +5,7 @@ export default function Footer() {
     <div className={styles["footer"]}>
       KhaneKura &copy; 2022
       <div className={styles["credit"]}>
-        <small>site credit here</small>
+        <small>your site credit here</small>
       </div>
     </div>
   );

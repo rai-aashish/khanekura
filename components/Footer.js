@@ -5,16 +5,7 @@ export default function Footer() {
     <div className={styles["footer"]}>
       KhaneKura &copy; 2022
       <div className={styles["credit"]}>
-        <small>
-          Developed by{" "}
-          <a
-            href="https://facebook.com/aaces.rae"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Aashish Rai
-          </a>
-        </small>
+        <small>site credit here</small>
       </div>
     </div>
   );
